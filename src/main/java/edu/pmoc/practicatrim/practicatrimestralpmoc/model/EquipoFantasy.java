@@ -3,14 +3,11 @@ package edu.pmoc.practicatrim.practicatrimestralpmoc.model;
 public class EquipoFantasy {
     private int idEquipo;
     private String nombreEquipo;
-    private long dineroDisponible;
-    private long valorPlantilla;
 
-    public EquipoFantasy(int idEquipo, String nombreEquipo, long dineroDisponible, long valorPlantilla) {
+
+    public EquipoFantasy(int idEquipo, String nombreEquipo) {
         this.idEquipo = idEquipo;
         this.nombreEquipo = nombreEquipo;
-        this.dineroDisponible = dineroDisponible;
-        this.valorPlantilla = valorPlantilla;
     }
 
     public String getNombreEquipo() {
@@ -31,21 +28,5 @@ public class EquipoFantasy {
         return this;
     }
 
-    public long getDineroDisponible() {
-        return dineroDisponible;
-    }
-
-    public EquipoFantasy setDineroDisponible(long dineroDisponible) {
-        this.dineroDisponible = dineroDisponible;
-        return this;
-    }
-
-    public long getValorPlantilla() {
-        return valorPlantilla;
-    }
-
-    public EquipoFantasy setValorPlantilla(long valorPlantilla) {
-        this.valorPlantilla = valorPlantilla;
-        return this;
-    }
+    
 }

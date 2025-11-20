@@ -3,7 +3,10 @@ package edu.pmoc.practicatrim.practicatrimestralpmoc.dao;
 
 
 import edu.pmoc.practicatrim.practicatrimestralpmoc.db.DatabaseConnection;
+import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Usuario;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -87,8 +90,11 @@ public class UsuarioDaoImpl implements UsuarioDao{
         return usuario;
     }
 
+    @Override
+    public ObservableList<EquipoFantasy> obtenerEquipoUser(int idUser) {
+        ObservableList<EquipoFantasy> equiposUser = FXCollections.observableArrayList();
 
-
+    }
 
 
 }
