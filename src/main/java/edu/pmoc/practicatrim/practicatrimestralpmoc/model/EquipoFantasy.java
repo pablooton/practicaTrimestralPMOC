@@ -5,7 +5,7 @@ public class EquipoFantasy {
     private String nombreEquipo;
 
 
-    public EquipoFantasy(int idEquipo, String nombreEquipo) {
+    public EquipoFantasy(int idEquipo, String nombreEquipo, int idUsuario) {
         this.idEquipo = idEquipo;
         this.nombreEquipo = nombreEquipo;
     }

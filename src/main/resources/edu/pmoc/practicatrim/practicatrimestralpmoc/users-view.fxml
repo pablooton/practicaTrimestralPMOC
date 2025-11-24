@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.TableColumn?>
+        <?import javafx.scene.control.TableView?>
+        <?import javafx.scene.layout.VBox?>
+        <?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.pmoc.practicatrim.practicatrimestralpmoc.controller.UsersController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <VBox alignment="CENTER_LEFT" spacing="5.0" style="-fx-border-color: #cccccc; -fx-border-width: 0 0 1 0; -fx-padding: 0 0 10 0;" VBox.vgrow="NEVER">
+        <children>
+            <Label fx:id="lblNombreEquipo" text="Cargando Equipo..." textFill="#2c3e50">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+            <Label fx:id="lblPropietario" text="..." textFill="#7f8c8d">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Label>
+        </children>
+    </VBox>
+
+    <TableView fx:id="tablaJugadores" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colNombre" prefWidth="150.0" text="Jugador" />
+            <TableColumn fx:id="colPosicion" prefWidth="80.0" text="Posición" />
+            <TableColumn fx:id="colEquipoReal" prefWidth="120.0" text="Equipo Liga" />
+            <TableColumn fx:id="colPuntos" prefWidth="90.0" text="Media Puntos" />
+            <TableColumn fx:id="colValor" prefWidth="110.0" text="Valor (€)" />
+        </columns>
+    </TableView>
+</VBox>
