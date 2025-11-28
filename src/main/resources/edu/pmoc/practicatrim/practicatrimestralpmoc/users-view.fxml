@@ -14,12 +14,12 @@
 
     <VBox alignment="CENTER_LEFT" spacing="5.0" style="-fx-border-color: #cccccc; -fx-border-width: 0 0 1 0; -fx-padding: 0 0 10 0;" VBox.vgrow="NEVER">
         <children>
-            <Label fx:id="lblNombreEquipo" text="Cargando Equipo..." textFill="#2c3e50">
+            <Label fx:id="lblNombreEquipo">
                 <font>
                     <Font name="System Bold" size="24.0" />
                 </font>
             </Label>
-            <Label fx:id="lblPropietario" text="..." textFill="#7f8c8d">
+            <Label fx:id="lblPropietario">
                 <font>
                     <Font size="14.0" />
                 </font>

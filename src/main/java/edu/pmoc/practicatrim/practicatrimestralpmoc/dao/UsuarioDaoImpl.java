@@ -58,10 +58,15 @@ public class UsuarioDaoImpl implements UsuarioDao {
     @Override
     public Usuario getUserByNickname(String nickname) {
         Usuario usuario = null;
+
+
         String sql = "SELECT * FROM usuarios WHERE nickname = ?";
+
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, nickname);
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     usuario = new Usuario(
@@ -70,20 +75,26 @@ public class UsuarioDaoImpl implements UsuarioDao {
                             rs.getString("apellido"),
                             rs.getString("nickname"),
                             rs.getString("password"),
-                            rs.getBoolean("isAdmin")
+                            false
                     );
                 }
             }
         } catch (SQLException e) {
+            System.out.println("ERROR SQL al recuperar usuario: " + e.getMessage());
             e.printStackTrace();
         }
+
+
+        System.out.println("DAO getUserByNickname resultado: " + (usuario != null ? usuario.getNickname() : "NULL"));
+
         return usuario;
     }
 
     @Override
     public EquipoFantasy getEquipoByUserId(int idUsuario) {
         EquipoFantasy equipo = null;
-        String sql = "SELECT * FROM EquipoFantasy WHERE id_Usuario = ?";
+        String sql = "SELECT * FROM equiposfantasy WHERE idUsuario = ?";
+
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idUsuario);
@@ -91,8 +102,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
                 if (rs.next()) {
                     equipo = new EquipoFantasy(
                             rs.getInt("idEquipo"),
-                            rs.getString("nombreEquipo"),
-                            rs.getInt("id_Usuario")
+                            rs.getString("nombre"),
+                            rs.getInt("idUsuario")
                     );
                 }
             }
@@ -105,10 +116,11 @@ public class UsuarioDaoImpl implements UsuarioDao {
     @Override
     public ObservableList<Jugador> obtenerJugadoresDelEquipoUsuario(int idUsuario) {
         ObservableList<Jugador> misJugadores = FXCollections.observableArrayList();
-        String sql = "SELECT j.* FROM Jugadores j " +
-                "JOIN jugadores_equipos je ON j.idJugador = je.id_jugador " +
-                "JOIN EquipoFantasy e ON je.id_equipoFantasy = e.idEquipo " +
-                "WHERE e.id_Usuario = ? AND je.fecha_salida IS NULL";
+
+        String sql = "SELECT j.* FROM jugadores j " +
+                "JOIN jugadores_equipos je ON j.idjugadores = je.id_jugador " +
+                "JOIN equiposfantasy e ON je.id_equipoFantasy = e.idEquipo " +
+                "WHERE e.idUsuario = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -116,10 +128,10 @@ public class UsuarioDaoImpl implements UsuarioDao {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Jugador jugador = new Jugador(
-                            rs.getInt("idJugador"),
+                            rs.getInt("idjugadores"),
                             rs.getString("nombre"),
                             rs.getLong("valorMercado"),
-                            rs.getInt("media"),
+                            rs.getInt("mediaPuntos"),
                             rs.getString("posicion"),
                             rs.getString("equipoLiga"),
                             false

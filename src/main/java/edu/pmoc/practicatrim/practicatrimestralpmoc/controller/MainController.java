@@ -40,7 +40,7 @@ public class MainController {
             Stage stage = (Stage) mainContentPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/pmoc/practicatrim/practicatrimestralpmoc/login-view.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root,320, 240);
             stage.setScene(scene);
             stage.setTitle("Login");
             stage.centerOnScreen();

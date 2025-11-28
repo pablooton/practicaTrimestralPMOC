@@ -29,6 +29,9 @@ public class UsersController {
 
     @FXML
     public void initialize() {
+        System.out.println("Entrando en intialize");
+        configurarColumnas();
+
         Usuario usuarioActual = SessionManager.getInstance().getCurrentUser();
 
         if (usuarioActual != null) {
@@ -42,8 +45,8 @@ public class UsersController {
                 lblNombreEquipo.setText("Sin Equipo");
                 lblPropietario.setText("");
             }
-
-            configurarColumnas();
+        }else{
+            System.out.println("ES NULO");
         }
     }
 
@@ -56,7 +59,24 @@ public class UsersController {
     }
 
     private void cargarJugadores(int idUsuario) {
+
         ObservableList<Jugador> plantilla = usuarioDao.obtenerJugadoresDelEquipoUsuario(idUsuario);
+
+
+        if (plantilla == null) {
+            System.out.println("ERROR GRAVE: La lista es NULL. Revisa el DAO.");
+        } else if (plantilla.isEmpty()) {
+            System.out.println("AVISO: La lista es válida pero está VACÍA (0 jugadores encontrados).");
+            System.out.println("Revisa tu base de datos: ¿El usuario " + idUsuario + " tiene equipo? ¿Ese equipo tiene jugadores vinculados?");
+        } else {
+            System.out.println("ÉXITO: Se han encontrado " + plantilla.size() + " jugadores.");
+
+            for (Jugador j : plantilla) {
+                System.out.println(" - Jugador: " + j.getNombre() + " | Puntos: " + j.getMediaPuntos());
+            }
+        }
+
+        // 3. Asignamos la lista a la tabla
         tablaJugadores.setItems(plantilla);
     }
 }

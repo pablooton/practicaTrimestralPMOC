@@ -18,7 +18,7 @@ public class SessionManager {
         return user;
     }
     public void setCurrentUser(Usuario usuario){
-        this.user = user;
+        this.user = usuario;
     }
     public void clearSession(){
         user = null;
