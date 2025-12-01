@@ -15,5 +15,6 @@ public interface UsuarioDao {
     public EquipoFantasy getEquipoByUserId(int idUser);
     public ObservableList<Jugador> obtenerJugadoresDelEquipoUsuario(int idUsuario);
     boolean updateNickname(int idUsuario, String newNickname);
+    boolean updatePassword(int idUsuario, String password);
 
 }

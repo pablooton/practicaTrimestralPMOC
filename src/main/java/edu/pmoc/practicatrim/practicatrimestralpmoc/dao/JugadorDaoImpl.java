@@ -1,7 +1,13 @@
 package edu.pmoc.practicatrim.practicatrimestralpmoc.dao;
 
+import edu.pmoc.practicatrim.practicatrimestralpmoc.db.DatabaseConnection;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JugadorDaoImpl implements JugadorDao{
@@ -12,7 +18,35 @@ public class JugadorDaoImpl implements JugadorDao{
 
     @Override
     public List<Jugador> sacarJugadoresMercado() {
-        return List.of();
+        List<Jugador> jugadoresLibres = new ArrayList<>();
+
+
+        String sql = "SELECT idjugadores, nombre, valorMercado, mediaPuntos, posicion, equipoLiga, isLibre FROM jugadores WHERE isLibre = TRUE";
+
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()){
+                Jugador jugadorLibre = new Jugador(
+                        rs.getInt("idjugadores"),
+                        rs.getString("nombre"),
+                        rs.getLong("valorMercado"),
+                        rs.getInt("mediaPuntos"),
+                        rs.getString("posicion"),
+                        rs.getString("equipoLiga"),
+                        rs.getBoolean("isLibre")
+                );
+                jugadoresLibres.add(jugadorLibre);
+            }
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException("Error al cargar jugadores del mercado desde la base de datos.", e);
+        }
+
+        return jugadoresLibres;
     }
 
     @Override

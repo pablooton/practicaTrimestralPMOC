@@ -2,6 +2,7 @@ package edu.pmoc.practicatrim.practicatrimestralpmoc.dao;
 
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface JugadorDao {

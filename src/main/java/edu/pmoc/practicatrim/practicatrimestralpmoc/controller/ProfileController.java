@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 public class ProfileController implements Initializable {
 
 
-
+    public TextField txtPass;
     @FXML
     private TextField txtNombre;
     @FXML
@@ -81,11 +81,32 @@ public class ProfileController implements Initializable {
     }
 
 
+
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void handleUpdatePssword(ActionEvent actionEvent) {
+        if (usuarioActual == null) {
+            showAlert("Error", "No hay usuario para actualizar.", Alert.AlertType.ERROR);
+            return;
+        }
+        String nuevaContra = txtPass.getText().trim();
+        if (nuevaContra.isEmpty()) {
+            showAlert("Error", "El nickname no puede estar vacío.", Alert.AlertType.WARNING);
+            return;
+        }
+        boolean exito = usuarioDAO.updatePassword(usuarioActual.getIdUsuario(), nuevaContra);
+        if (exito){
+            usuarioActual.setPassword(nuevaContra);
+
+            showAlert("Éxito", "Nickname actualizado correctamente.", Alert.AlertType.INFORMATION);
+        }else {
+            showAlert("Error", "No se pudo actualizar el nickname en la base de datos.", Alert.AlertType.ERROR);
+        }
     }
 }

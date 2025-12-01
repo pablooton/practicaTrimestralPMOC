@@ -161,4 +161,20 @@ public class UsuarioDaoImpl implements UsuarioDao {
             return false;
         }
     }
+
+    @Override
+    public boolean updatePassword(int idUsuario, String newPassword) {
+        String sql = "UPDATE usuarios SET password = ? WHERE idusuario = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, newPassword);
+            ps.setInt(2, idUsuario);
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

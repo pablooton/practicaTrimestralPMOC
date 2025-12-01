@@ -25,10 +25,14 @@
 
         <Label text="Nickname:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
         <TextField fx:id="txtNickname" promptText="Nuevo Nickname" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Label text="Nickname:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="txtPass" promptText="Nueva Contraseña" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
     </GridPane>
 
     <Button onAction="#handleUpdateNickname" text="Guardar Nickname"
             >
+        <Button onAction="#handleUpdatePssword" text = "Guardar contraseña"/>
         <VBox.margin>
             <Insets top="20.0" />
         </VBox.margin>

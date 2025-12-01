@@ -61,5 +61,6 @@ public class MainController {
     }
 
     public void handleMercado(ActionEvent actionEvent) {
+        ViewSwitcher.switchView(AppView.MARKET);
     }
 }
