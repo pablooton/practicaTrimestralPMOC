@@ -1,6 +1,7 @@
 package edu.pmoc.practicatrim.practicatrimestralpmoc.dao;
 
 import edu.pmoc.practicatrim.practicatrimestralpmoc.db.DatabaseConnection;
+import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,40 @@ import java.time.LocalDateTime;
 public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
 
     @Override
+    public EquipoFantasy getEquipoByUserId(int idUsuario) {
+        EquipoFantasy equipo = null;
+        String sql = "SELECT idEquipo, nombre, idUsuario, presupuesto FROM equiposfantasy WHERE idUsuario = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    long presupuesto = rs.getLong("presupuesto");
+
+                    equipo = new EquipoFantasy(
+                            rs.getInt("idEquipo"),
+                            rs.getString("nombre"),
+                            rs.getInt("idUsuario"),
+                            presupuesto
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return equipo;
+    }
+
+    @Override
     public boolean ficharJugador(int idEquipoFantasy, int idJugador, long precioJugador) {
+
         String sqlPresupuesto = "SELECT presupuesto FROM equiposfantasy WHERE idEquipo = ?";
         String sqlUpdatePresupuesto = "UPDATE equiposfantasy SET presupuesto = presupuesto - ? WHERE idEquipo = ?";
         String sqlInsertFichaje = "INSERT INTO jugadores_equipos(id_equipofantasy, id_jugador, fecha_fichaje) VALUES(?, ?, ?)";
+        String sqlUpdateJugadorLibre = "UPDATE jugadores SET isLibre = FALSE WHERE idjugadores = ?";
 
         Connection connection = null;
         boolean exito = false;
@@ -23,6 +54,7 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
         try {
             connection = DatabaseConnection.getConnection();
             connection.setAutoCommit(false);
+
 
             try (PreparedStatement ps = connection.prepareStatement(sqlPresupuesto)) {
                 ps.setInt(1, idEquipoFantasy);
@@ -35,11 +67,13 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
                 }
             }
 
+
             try (PreparedStatement ps = connection.prepareStatement(sqlUpdatePresupuesto)) {
                 ps.setLong(1, precioJugador);
                 ps.setInt(2, idEquipoFantasy);
                 ps.executeUpdate();
             }
+
 
             try (PreparedStatement ps = connection.prepareStatement(sqlInsertFichaje)) {
                 Timestamp now = Timestamp.valueOf(LocalDateTime.now());
@@ -47,6 +81,19 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
                 ps.setInt(2, idJugador);
                 ps.setTimestamp(3, now);
                 ps.executeUpdate();
+            }
+
+
+            try (PreparedStatement ps = connection.prepareStatement(sqlUpdateJugadorLibre)) {
+                ps.setInt(1, idJugador);
+                int filasAfectadas = ps.executeUpdate();
+
+
+                if (filasAfectadas == 0) {
+                    System.err.println("Advertencia: No se pudo marcar al jugador " + idJugador + " como no libre.");
+                    connection.rollback();
+                    return false;
+                }
             }
 
             connection.commit();

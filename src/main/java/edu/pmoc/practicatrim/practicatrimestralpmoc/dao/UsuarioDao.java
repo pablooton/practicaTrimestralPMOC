@@ -12,7 +12,6 @@ public interface UsuarioDao {
     public List<Usuario> getSelectedAllUsers();
     boolean validarCredenciales(String username,String password);
     public Usuario getUserByNickname(String nickname);
-    public EquipoFantasy getEquipoByUserId(int idUser);
     public ObservableList<Jugador> obtenerJugadoresDelEquipoUsuario(int idUsuario);
     boolean updateNickname(int idUsuario, String newNickname);
     boolean updatePassword(int idUsuario, String password);

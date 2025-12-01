@@ -1,54 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+    <?import javafx.geometry.Insets?>
+    <?import javafx.scene.control.*?>
+    <?import javafx.scene.layout.*?>
+    <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.pmoc.practicatrim.practicatrimestralpmoc.controller.MarketController"
-            prefHeight="700.0" prefWidth="1000.0">
+    <VBox alignment="TOP_CENTER" spacing="15.0" style="-fx-background-color: #f4f4f4; -fx-padding: 20;"
+          xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="edu.pmoc.practicatrim.practicatrimestralpmoc.controller.MarketController">
 
-    <VBox spacing="10.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-        <padding>
-            <Insets top="15.0" right="15.0" bottom="15.0" left="15.0"/>
-        </padding>
+        <Label text="Mercado de Fichajes" alignment="CENTER" maxWidth="Infinity">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+            <padding><Insets bottom="10.0"/></padding>
+        </Label>
 
-        <HBox alignment="CENTER_LEFT" spacing="20.0">
-            <Label text="Presupuesto Restante:" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #e0f2f7; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;">
+            <Label text="Tu Presupuesto:" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
             <Label fx:id="lblPresupuesto" text="100.000.000 €" style="-fx-font-weight: bold; -fx-text-fill: #007bff; -fx-font-size: 16px;"/>
         </HBox>
 
-        <SplitPane dividerPositions="0.6" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+        <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS" orientation="HORIZONTAL">
 
             <AnchorPane>
                 <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="5.0">
-                    <Label text="Mercado de Jugadores Libres" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-                    <TableView fx:id="marketTable" VBox.vgrow="ALWAYS">
+                    <Label text="Jugadores Libres Disponibles" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    <TableView fx:id="marketTable" VBox.vgrow="ALWAYS" prefHeight="200.0">
                         <columns>
-                            <TableColumn fx:id="marketNombreCol" text="Jugador" prefWidth="150.0"/>
-                            <TableColumn fx:id="marketPosicionCol" text="Pos." prefWidth="60.0"/>
-                            <TableColumn fx:id="marketPuntosCol" text="Puntos" prefWidth="70.0"/>
-                            <TableColumn fx:id="marketValorCol" text="Precio (€)" prefWidth="120.0"/>
-                            <TableColumn fx:id="marketAccionCol" text="Fichar" prefWidth="80.0"/>
+                            <TableColumn fx:id="colNombre" text="Jugador" prefWidth="150.0"/>
+                            <TableColumn fx:id="colPosicion" text="Pos." prefWidth="70.0"/>
+                            <TableColumn fx:id="colMediaPuntos" text="Puntos" prefWidth="70.0"/>
+                            <TableColumn fx:id="colValorMercado" text="Precio (€)" prefWidth="120.0"/>
                         </columns>
                     </TableView>
                 </VBox>
             </AnchorPane>
 
             <AnchorPane>
-                <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="5.0">
-                    <Label text="Mi Plantilla Actual" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
-                    <TableView fx:id="myTeamTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="teamNombreCol" text="Jugador" prefWidth="150.0"/>
-                            <TableColumn fx:id="teamPosicionCol" text="Pos." prefWidth="60.0"/>
-                            <TableColumn fx:id="teamPuntosCol" text="Puntos" prefWidth="70.0"/>
-                            <TableColumn fx:id="teamAccionCol" text="Vender" prefWidth="80.0"/>
-                        </columns>
-                    </TableView>
+                <VBox fx:id="detailPane" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="15.0" alignment="TOP_CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 5;">
+                    <Label text="Detalles para Fichar" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333333;"/>
+                    <Separator />
+
+                    <GridPane hgap="10.0" vgap="10.0" maxWidth="250.0">
+
+
+                        <TextField fx:id="txtDetalleNombre" editable="false" promptText="Nombre del Jugador" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+
+                        <TextField fx:id="txtDetallePosicion" editable="false" promptText="DEL, MED, DEF, POR" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+                        <TextField fx:id="txtDetalleEquipoLiga" editable="false" promptText="Equipo de la Liga" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+
+                        <TextField fx:id="txtDetalleMediaPuntos" editable="false" promptText="Puntos Históricos" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+
+                        <TextField fx:id="txtDetalleValorMercado" editable="false" promptText="Precio en €" style="-fx-text-fill: #e67e22; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    </GridPane>
+
+                    <Button fx:id="btnComprar" text="Fichar Jugador" onAction="#handleFicharJugador"
+                            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 15px; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;"
+                            disable="true">
+                        <VBox.margin><Insets top="10.0"/></VBox.margin>
+                    </Button>
                 </VBox>
             </AnchorPane>
         </SplitPane>
     </VBox>
-</AnchorPane>

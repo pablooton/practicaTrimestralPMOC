@@ -1,6 +1,8 @@
 package edu.pmoc.practicatrim.practicatrimestralpmoc.controller;
 
 import edu.pmoc.practicatrim.practicatrimestralpmoc.SessionManager;
+import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.EquipoFantasyDao;
+import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.EquipoFantasyDaoImpl;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.UsuarioDao;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.UsuarioDaoImpl;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
@@ -27,6 +29,7 @@ public class UsersController {
     @FXML private TableColumn<Jugador, Long> colValor;
 
     private final UsuarioDao usuarioDao = new UsuarioDaoImpl();
+    private final EquipoFantasyDao equipoFantasyDao = new EquipoFantasyDaoImpl();
 
     @FXML
     public void initialize() {
@@ -36,7 +39,7 @@ public class UsersController {
         Usuario usuarioActual = SessionManager.getInstance().getCurrentUser();
 
         if (usuarioActual != null) {
-            EquipoFantasy miEquipo = usuarioDao.getEquipoByUserId(usuarioActual.getIdUsuario());
+            EquipoFantasy miEquipo =equipoFantasyDao.getEquipoByUserId(usuarioActual.getIdUsuario());
 
             if (miEquipo != null) {
                 lblNombreEquipo.setText(miEquipo.getNombreEquipo());
