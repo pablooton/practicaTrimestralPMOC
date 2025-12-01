@@ -93,26 +93,27 @@ public class UsuarioDaoImpl implements UsuarioDao {
     @Override
     public EquipoFantasy getEquipoByUserId(int idUsuario) {
         EquipoFantasy equipo = null;
-        String sql = "SELECT * FROM equiposfantasy WHERE idUsuario = ?";
+        String sql = "SELECT idEquipo, nombre, idUsuario, presupuesto FROM equiposfantasy WHERE idUsuario = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idUsuario);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    equipo = new EquipoFantasy(
+                   equipo = new EquipoFantasy(
                             rs.getInt("idEquipo"),
                             rs.getString("nombre"),
-                            rs.getInt("idUsuario")
+                            rs.getInt("idUsuario"),
+                            rs.getLong("presupuesto")
                     );
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return equipo;
     }
-
     @Override
     public ObservableList<Jugador> obtenerJugadoresDelEquipoUsuario(int idUsuario) {
         ObservableList<Jugador> misJugadores = FXCollections.observableArrayList();

@@ -5,6 +5,6 @@ import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 import java.util.List;
 
 public interface EquipoFantasyDao {
-    boolean ficharJugador(int idEquipoFantasy, int idJugador);
-    boolean venderJugador(int idJugador);
+    public boolean ficharJugador(int idEquipoFantasy, int idJugador, long precioJugador);
+    public boolean venderJugador(int idJugador, int idEquipoFantasy, long precioVenta);
 }

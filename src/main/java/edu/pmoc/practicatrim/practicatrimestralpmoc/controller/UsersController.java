@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class UsersController {
 
+    @FXML public Label lblPresupuesto;
     @FXML private Label lblNombreEquipo;
     @FXML private Label lblPropietario;
 
@@ -40,6 +41,8 @@ public class UsersController {
             if (miEquipo != null) {
                 lblNombreEquipo.setText(miEquipo.getNombreEquipo());
                 lblPropietario.setText("Entrenador: " + usuarioActual.getNickname());
+                lblPresupuesto.setText("Presupuesto " + miEquipo.getPresupuesto());
+
                 cargarJugadores(usuarioActual.getIdUsuario());
             } else {
                 lblNombreEquipo.setText("Sin Equipo");

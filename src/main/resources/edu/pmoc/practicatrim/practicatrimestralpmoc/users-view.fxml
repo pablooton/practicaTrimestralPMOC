@@ -24,6 +24,11 @@
                     <Font size="14.0" />
                 </font>
             </Label>
+            <Label fx:id="lblPresupuesto">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Label>
         </children>
     </VBox>
 
