@@ -26,7 +26,7 @@
         <VBox prefWidth="150.0" spacing="10" style="-fx-padding: 10;">
             <children>
                 <Button maxWidth="1.7976931348623157E308" onAction="#handleShowUsers" text="Mi equipo" />
-                <Button maxWidth="1.7976931348623157E308" text="Mercado" />
+                <Button maxWidth="1.7976931348623157E308" text="Mercado" onAction="#handleMercado"/>
             </children>
         </VBox>
     </left>

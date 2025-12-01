@@ -144,4 +144,20 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
         return misJugadores;
     }
+
+    @Override
+    public boolean updateNickname(int idUsuario, String newNickname) {
+        String sql = "UPDATE usuarios SET nickname = ? WHERE idusuario = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, newNickname);
+            ps.setInt(2, idUsuario);
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -76,7 +76,6 @@ public class UsersController {
             }
         }
 
-        // 3. Asignamos la lista a la tabla
         tablaJugadores.setItems(plantilla);
     }
 }
