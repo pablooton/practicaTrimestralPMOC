@@ -177,4 +177,27 @@ public class UsuarioDaoImpl implements UsuarioDao {
             return false;
         }
     }
+
+    @Override
+    public boolean existeNickname(String nickname) {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE nickname = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, nickname);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true;
+        }
+        return false;
+    }
+
+
 }

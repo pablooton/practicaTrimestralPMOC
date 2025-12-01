@@ -16,5 +16,6 @@ public interface UsuarioDao {
     public ObservableList<Jugador> obtenerJugadoresDelEquipoUsuario(int idUsuario);
     boolean updateNickname(int idUsuario, String newNickname);
     boolean updatePassword(int idUsuario, String password);
+    boolean existeNickname(String nickname);
 
 }
