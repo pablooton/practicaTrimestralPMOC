@@ -9,17 +9,29 @@ import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Usuario;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 public class UsersController {
 
-    @FXML public Label lblPresupuesto;
+
     @FXML private Label lblNombreEquipo;
     @FXML private Label lblPropietario;
+    @FXML public Label lblPresupuesto;
+
+
+    @FXML public VBox detailPane;
+    @FXML public TextField txtDetalleNombre;
+    @FXML public TextField txtDetallePosicion;
+    @FXML public TextField txtDetalleMediaPuntos;
+    @FXML public TextField txtDetalleValorVenta;
+    @FXML public Button btnVender;
+    @FXML public Button btnCalcularTiempo;
+    @FXML public Label lblTiempoEnClub;
+
 
     @FXML private TableView<Jugador> tablaJugadores;
     @FXML private TableColumn<Jugador, String> colNombre;
@@ -33,27 +45,40 @@ public class UsersController {
 
     @FXML
     public void initialize() {
-        System.out.println("Entrando en intialize");
+        System.out.println("Entrando en initialize");
         configurarColumnas();
+
+
+        tablaJugadores.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> mostrarDetallesJugador(newValue)
+        );
 
         Usuario usuarioActual = SessionManager.getInstance().getCurrentUser();
 
         if (usuarioActual != null) {
-            EquipoFantasy miEquipo =equipoFantasyDao.getEquipoByUserId(usuarioActual.getIdUsuario());
+            EquipoFantasy miEquipo = equipoFantasyDao.getEquipoByUserId(usuarioActual.getIdUsuario());
 
             if (miEquipo != null) {
+
                 lblNombreEquipo.setText(miEquipo.getNombreEquipo());
                 lblPropietario.setText("Entrenador: " + usuarioActual.getNickname());
-                lblPresupuesto.setText("Presupuesto " + miEquipo.getPresupuesto());
+                lblPresupuesto.setText("Presupuesto: " + miEquipo.getPresupuesto() + " €");
+
 
                 cargarJugadores(usuarioActual.getIdUsuario());
             } else {
                 lblNombreEquipo.setText("Sin Equipo");
-                lblPropietario.setText("");
+                lblPropietario.setText("Necesitas crear un equipo.");
+                lblPresupuesto.setText("Presupuesto: N/A");
             }
-        }else{
-            System.out.println("ES NULO");
+        } else {
+            System.out.println("ES NULO: No hay usuario en la sesión.");
+            lblNombreEquipo.setText("Error de Sesión");
+            lblPropietario.setText("Debes iniciar sesión.");
         }
+
+
+        mostrarDetallesJugador(null);
     }
 
     private void configurarColumnas() {
@@ -65,23 +90,43 @@ public class UsersController {
     }
 
     private void cargarJugadores(int idUsuario) {
-
         ObservableList<Jugador> plantilla = usuarioDao.obtenerJugadoresDelEquipoUsuario(idUsuario);
-
-
-        if (plantilla == null) {
-            System.out.println("ERROR GRAVE: La lista es NULL. Revisa el DAO.");
-        } else if (plantilla.isEmpty()) {
-            System.out.println("AVISO: La lista es válida pero está VACÍA (0 jugadores encontrados).");
-            System.out.println("Revisa tu base de datos: ¿El usuario " + idUsuario + " tiene equipo? ¿Ese equipo tiene jugadores vinculados?");
-        } else {
-            System.out.println("ÉXITO: Se han encontrado " + plantilla.size() + " jugadores.");
-
-            for (Jugador j : plantilla) {
-                System.out.println(" - Jugador: " + j.getNombre() + " | Puntos: " + j.getMediaPuntos());
-            }
-        }
-
         tablaJugadores.setItems(plantilla);
+    }
+
+
+    private void mostrarDetallesJugador(Jugador jugador) {
+        boolean selected = jugador != null;
+
+        if (selected) {
+            txtDetalleNombre.setText(jugador.getNombre());
+            txtDetallePosicion.setText(jugador.getPosicion());
+            txtDetalleMediaPuntos.setText(String.valueOf(jugador.getMediaPuntos()));
+            txtDetalleValorVenta.setText(String.valueOf(jugador.getValorMercado()));
+            lblTiempoEnClub.setText("Seleccionado: " + jugador.getNombre());
+        } else {
+            txtDetalleNombre.setText("");
+            txtDetallePosicion.setText("");
+            txtDetalleMediaPuntos.setText("");
+            txtDetalleValorVenta.setText("");
+        }
+        btnVender.setDisable(!selected);
+        btnCalcularTiempo.setDisable(!selected);
+    }
+
+    @FXML
+    public void handleVenderJugador(ActionEvent actionEvent) {
+        Jugador jugador = tablaJugadores.getSelectionModel().getSelectedItem();
+        if (jugador != null) {
+            System.out.println("Vendiendo a: " + jugador.getNombre());
+        }
+    }
+
+    @FXML
+    public void handleCalcularTiempo(ActionEvent actionEvent) {
+        Jugador jugador = tablaJugadores.getSelectionModel().getSelectedItem();
+        if (jugador != null) {
+            lblTiempoEnClub.setText("Tiempo calculado (FAKE): 1 año, 2 meses.");
+        }
     }
 }

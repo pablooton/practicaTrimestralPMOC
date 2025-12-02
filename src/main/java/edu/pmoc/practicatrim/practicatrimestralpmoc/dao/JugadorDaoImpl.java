@@ -13,7 +13,29 @@ import java.util.List;
 public class JugadorDaoImpl implements JugadorDao{
     @Override
     public List<Jugador> getAllJugadores() {
-        return List.of();
+        List<Jugador> jugadores= new ArrayList<>();
+        String sql = "Select * from jugadores";
+        Connection connection = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+
+                Jugador jugador = new Jugador(
+                        rs.getInt("idjugadores"),
+                        rs.getString("nombre"),
+                        rs.getLong("valorMercado"),
+                        rs.getInt("mediaPuntos"),
+                        rs.getString("posicion"),
+                        rs.getString("equipoLiga"),
+                        rs.getBoolean("isLibre")
+                );
+                jugadores.add(jugador);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return jugadores;
     }
 
     @Override
@@ -51,6 +73,38 @@ public class JugadorDaoImpl implements JugadorDao{
 
     @Override
     public List<Jugador> buscarJugadores(String nombre) {
-        return List.of();
+        List<Jugador> jugadoresEncontrados = new ArrayList<>();
+
+        String sql = "SELECT idjugadores, nombre, valorMercado, mediaPuntos, posicion, equipoLiga, isLibre FROM jugadores WHERE LOWER(nombre) LIKE ?";
+
+        try(Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+
+            String nombreBusqueda = "%" + nombre.toLowerCase() + "%";
+            preparedStatement.setString(1, nombreBusqueda);
+
+            try(ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()){
+
+                    Jugador jugador = new Jugador(
+                            rs.getInt("idjugadores"),
+                            rs.getString("nombre"),
+                            rs.getLong("valorMercado"),
+                            rs.getInt("mediaPuntos"),
+                            rs.getString("posicion"),
+                            rs.getString("equipoLiga"),
+                            rs.getBoolean("isLibre")
+                    );
+                    jugadoresEncontrados.add(jugador);
+                }
+            }
+        } catch (SQLException e) {
+
+            throw new RuntimeException("Error al buscar jugadores por nombre en la base de datos.", e);
+        }
+
+        return jugadoresEncontrados;
     }
 }
+

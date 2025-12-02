@@ -26,7 +26,6 @@ public class MarketController implements Initializable {
     @FXML public TableView<Jugador> marketTable;
     @FXML public TableColumn<Jugador, String> colNombre;
     @FXML public TableColumn<Jugador, String> colPosicion;
-    @FXML public TableColumn<Jugador, String> colEquipoLiga;
     @FXML public TableColumn<Jugador, Integer> colMediaPuntos;
     @FXML public TableColumn<Jugador, Long> colValorMercado;
     @FXML public Label lblPresupuesto;
@@ -41,7 +40,6 @@ public class MarketController implements Initializable {
 
     private final JugadorDao jugadorDAO = new JugadorDaoImpl();
     private final EquipoFantasyDao equipoFantasyDAO = new EquipoFantasyDaoImpl();
-    private final UsuarioDao usuarioDao = new UsuarioDaoImpl();
     private Jugador jugadorSeleccionado;
     private EquipoFantasy equipoUsuario;
     private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
