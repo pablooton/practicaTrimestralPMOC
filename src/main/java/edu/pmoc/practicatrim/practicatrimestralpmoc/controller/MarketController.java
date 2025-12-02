@@ -5,7 +5,6 @@ import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.*;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Usuario;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.List;

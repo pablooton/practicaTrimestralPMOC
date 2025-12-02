@@ -123,8 +123,9 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
 
     @Override
     public boolean venderJugador(int idJugador, int idEquipoFantasy, long precioVenta) {
-        String sqlDeleteFichaje = "DELETE FROM jugadores_equipos WHERE id_jugador = ?";
+        String sqlDeleteFichaje = "DELETE FROM jugadores_equipos WHERE id_jugador = ? AND id_equipofantasy = ?";
         String sqlUpdatePresupuesto = "UPDATE equiposfantasy SET presupuesto = presupuesto + ? WHERE idEquipo = ?";
+        String sqlUpdateJugadorLibre = "UPDATE jugadores SET isLibre = TRUE WHERE idjugadores = ?";
 
         Connection connection = null;
         boolean exito = false;
@@ -135,7 +136,9 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
 
             try (PreparedStatement ps = connection.prepareStatement(sqlDeleteFichaje)) {
                 ps.setInt(1, idJugador);
+                ps.setInt(2, idEquipoFantasy);
                 int filasAfectadas = ps.executeUpdate();
+
                 if (filasAfectadas != 1) {
                     connection.rollback();
                     return false;
@@ -145,6 +148,11 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
             try (PreparedStatement ps = connection.prepareStatement(sqlUpdatePresupuesto)) {
                 ps.setLong(1, precioVenta);
                 ps.setInt(2, idEquipoFantasy);
+                ps.executeUpdate();
+            }
+
+            try (PreparedStatement ps = connection.prepareStatement(sqlUpdateJugadorLibre)) {
+                ps.setInt(1, idJugador);
                 ps.executeUpdate();
             }
 

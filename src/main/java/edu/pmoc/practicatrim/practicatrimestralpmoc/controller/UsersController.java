@@ -15,6 +15,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class UsersController {
 
 
@@ -42,6 +45,9 @@ public class UsersController {
 
     private final UsuarioDao usuarioDao = new UsuarioDaoImpl();
     private final EquipoFantasyDao equipoFantasyDao = new EquipoFantasyDaoImpl();
+    private EquipoFantasy equipoFantasy;
+    private Jugador jugador;
+    private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
 
     @FXML
     public void initialize() {
@@ -56,13 +62,13 @@ public class UsersController {
         Usuario usuarioActual = SessionManager.getInstance().getCurrentUser();
 
         if (usuarioActual != null) {
-            EquipoFantasy miEquipo = equipoFantasyDao.getEquipoByUserId(usuarioActual.getIdUsuario());
+            equipoFantasy = equipoFantasyDao.getEquipoByUserId(usuarioActual.getIdUsuario());
 
-            if (miEquipo != null) {
+            if (equipoFantasy != null) {
 
-                lblNombreEquipo.setText(miEquipo.getNombreEquipo());
+                lblNombreEquipo.setText(equipoFantasy.getNombreEquipo());
                 lblPropietario.setText("Entrenador: " + usuarioActual.getNickname());
-                lblPresupuesto.setText("Presupuesto: " + miEquipo.getPresupuesto() + " €");
+                lblPresupuesto.setText("Presupuesto: " + equipoFantasy.getPresupuesto() + " €");
 
 
                 cargarJugadores(usuarioActual.getIdUsuario());
@@ -85,7 +91,13 @@ public class UsersController {
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colPosicion.setCellValueFactory(new PropertyValueFactory<>("posicion"));
         colPuntos.setCellValueFactory(new PropertyValueFactory<>("mediaPuntos"));
-        colValor.setCellValueFactory(new PropertyValueFactory<>("valorMercado"));
+        colValor.setCellFactory(tc -> new TableCell<Jugador, Long>() {
+            @Override
+            protected void updateItem(Long item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : currencyFormatter.format(item));
+            }
+        });
         colEquipoReal.setCellValueFactory(new PropertyValueFactory<>("equipoLiga"));
     }
 
@@ -113,12 +125,30 @@ public class UsersController {
         btnVender.setDisable(!selected);
         btnCalcularTiempo.setDisable(!selected);
     }
+    private void actualizarLabelPresupuesto(long presupuesto) {
+        lblPresupuesto.setText(currencyFormatter.format(presupuesto));
+    }
 
     @FXML
     public void handleVenderJugador(ActionEvent actionEvent) {
-        Jugador jugador = tablaJugadores.getSelectionModel().getSelectedItem();
-        if (jugador != null) {
-            System.out.println("Vendiendo a: " + jugador.getNombre());
+        jugador = tablaJugadores.getSelectionModel().getSelectedItem();
+        if (jugador == null ) {
+            showAlert("Error", "Asegúrate de seleccionar un jugador de tu plantilla para vender.", Alert.AlertType.WARNING);
+            return;
+        }
+        long precioVenta = jugador.getValorMercado();
+        boolean exito = equipoFantasyDao.venderJugador(jugador.getIdJugador(),equipoFantasy.getIdEquipo(),precioVenta);
+
+        if (exito){
+            showAlert("Venta Exitosa", jugador.getNombre() + " ha sido vendido por " + currencyFormatter.format(precioVenta) + ".", Alert.AlertType.INFORMATION);
+
+            equipoFantasy.setPresupuesto(equipoFantasy.getPresupuesto() + precioVenta);
+            actualizarLabelPresupuesto(equipoFantasy.getPresupuesto());
+
+            tablaJugadores.getItems().remove(jugador);
+            tablaJugadores.getSelectionModel().clearSelection();
+            mostrarDetallesJugador(null);
+
         }
     }
 
@@ -126,7 +156,14 @@ public class UsersController {
     public void handleCalcularTiempo(ActionEvent actionEvent) {
         Jugador jugador = tablaJugadores.getSelectionModel().getSelectedItem();
         if (jugador != null) {
-            lblTiempoEnClub.setText("Tiempo calculado (FAKE): 1 año, 2 meses.");
+
         }
+    }
+    private void showAlert(String title, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
