@@ -62,4 +62,16 @@ public class MainController {
     public void handleMercado(ActionEvent actionEvent) {
         ViewSwitcher.switchView(AppView.MARKET);
     }
+
+    public void handleJugadores(ActionEvent actionEvent) {
+        ViewSwitcher.switchView(AppView.PLAYERS);
+    }
+
+    public void handleUsuarios(ActionEvent actionEvent) {
+        ViewSwitcher.switchView(AppView.USERSBD);
+    }
+
+    public void handleEquipos(ActionEvent actionEvent) {
+        ViewSwitcher.switchView(AppView.TEAMS);
+    }
 }

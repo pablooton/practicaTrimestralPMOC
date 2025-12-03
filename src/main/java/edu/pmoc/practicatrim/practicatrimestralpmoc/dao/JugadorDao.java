@@ -9,6 +9,7 @@ public interface JugadorDao {
     public List<Jugador> getAllJugadores();
     public List<Jugador> sacarJugadoresMercado();
     public List<Jugador> buscarJugadores(String nombre);
-
-
+    public void addJugador(Jugador jugador);
+    public void updateJugador(Jugador jugador);
+    public void eliminarJugador(int idJugador);
 }

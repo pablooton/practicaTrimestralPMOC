@@ -3,10 +3,7 @@ package edu.pmoc.practicatrim.practicatrimestralpmoc.dao;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.db.DatabaseConnection;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +102,106 @@ public class JugadorDaoImpl implements JugadorDao{
         }
 
         return jugadoresEncontrados;
+    }
+    @Override
+    public void addJugador(Jugador jugador) {
+
+        String sql = "INSERT INTO jugadores (nombre, valorMercado, mediaPuntos, posicion, equipoLiga, isLibre) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+
+            ps.setString(1, jugador.getNombre());
+            ps.setLong(2, jugador.getValorMercado());
+            ps.setInt(3, jugador.getMediaPuntos());
+            ps.setString(4, jugador.getPosicion());
+            ps.setString(5, jugador.getEquipoLiga());
+            ps.setBoolean(6, jugador.isLibre());
+
+            ps.executeUpdate();
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    jugador.setIdJugador(generatedKeys.getInt(1));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al añadir un nuevo jugador.", e);
+        }
+    }
+
+
+    @Override
+    public void updateJugador(Jugador jugador) {
+        String sql = "UPDATE jugadores SET nombre = ?, valorMercado = ?, mediaPuntos = ?, posicion = ?, equipoLiga = ?, isLibre = ? WHERE idjugadores = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, jugador.getNombre());
+            ps.setLong(2, jugador.getValorMercado());
+            ps.setInt(3, jugador.getMediaPuntos());
+            ps.setString(4, jugador.getPosicion());
+            ps.setString(5, jugador.getEquipoLiga());
+            ps.setBoolean(6, jugador.isLibre());
+            ps.setInt(7, jugador.getIdJugador());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar el jugador con ID: " + jugador.getIdJugador(), e);
+        }
+    }
+
+
+    @Override
+    public void eliminarJugador(int idJugador) {
+        String sqlDeleteEquipo = "DELETE FROM jugadores_equipos WHERE id_jugador = ?";
+        String sqlDeleteJugador = "DELETE FROM jugadores WHERE idjugadores = ?";
+
+        Connection connection = null;
+
+        try {
+            connection = DatabaseConnection.getConnection();
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement psEquipo = connection.prepareStatement(sqlDeleteEquipo)) {
+                psEquipo.setInt(1, idJugador);
+                psEquipo.executeUpdate();
+            }
+
+            try (PreparedStatement psJugador = connection.prepareStatement(sqlDeleteJugador)) {
+                psJugador.setInt(1, idJugador);
+                psJugador.executeUpdate();
+            }
+
+            connection.commit();
+
+        } catch (SQLException e) {
+            System.err.println("Error SQL durante la eliminación. Intentando Rollback...");
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                    System.err.println("Rollback exitoso.");
+                }
+            } catch (SQLException rollbackEx) {
+                System.err.println("Error crítico durante el rollback: " + rollbackEx.getMessage());
+            }
+
+            throw new RuntimeException("Error al eliminar el jugador con ID: " + idJugador + ". Revisar dependencias.", e);
+
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                }
+            } catch (SQLException closeEx) {
+                System.err.println("Error al cerrar la conexión después de la transacción: " + closeEx.getMessage());
+            }
+        }
     }
 }
 

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ComboBox?>
+
+<VBox alignment="TOP_CENTER" spacing="15.0" style="-fx-background-color: #f4f4f4; -fx-padding: 20;"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.pmoc.practicatrim.practicatrimestralpmoc.controller.JugadoresController"> <Label text="Gestión de Jugadores (Base de Datos)" alignment="CENTER" maxWidth="Infinity">
+    <font>
+        <Font name="System Bold" size="24.0" />
+    </font>
+    <padding><Insets bottom="10.0"/></padding>
+</Label>
+
+    <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS" orientation="HORIZONTAL" style="-fx-border-color: #cccccc;">
+
+        <AnchorPane>
+            <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="10.0" style="-fx-padding: 10;">
+                <Label text="Lista de Jugadores en la BD" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #007bff;"/>
+
+                <TableView fx:id="tablaJugadores" VBox.vgrow="ALWAYS" prefHeight="200.0">
+                    <columns>
+                        <TableColumn fx:id="colID" text="ID" prefWidth="50.0"/>
+                        <TableColumn fx:id="colNombre" text="Nombre" prefWidth="150.0"/>
+                        <TableColumn fx:id="colPosicion" text="Posición" prefWidth="100.0"/>
+                        <TableColumn fx:id="colEquipoReal" text="Equipo Liga" prefWidth="120.0"/>
+                        <TableColumn fx:id="colMediaPuntos" text="Media Pts" prefWidth="90.0"/>
+                        <TableColumn fx:id="colValor" text="Valor (€)" prefWidth="100.0"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </AnchorPane>
+
+        <AnchorPane style="-fx-background-color: #ffffff;">
+            <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  spacing="15.0" alignment="TOP_CENTER" style="-fx-padding: 20;">
+
+                <Label text="Gestión Jugadoeres" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #333333;"/>
+                <Separator />
+
+                <GridPane hgap="10.0" vgap="10.0">
+                    <Label text="ID Jugador:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="txtIdJugador" editable="false" promptText="Generado automáticamente" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="txtNombre" promptText="Nombre completo del jugador" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Posición:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <ComboBox fx:id="cmbPosicion" promptText="Seleccionar Posición" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="Equipo Liga:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="txtEquipoReal" promptText="Ej: Real Madrid" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <Label text="Media Pts:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <TextField fx:id="txtMediaPuntos" promptText="Ej: 7.5" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <Label text="Valor (€):" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <TextField fx:id="txtValor" promptText="Precio de mercado" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                </GridPane>
+
+                <Separator />
+
+                <HBox spacing="10.0" alignment="CENTER">
+                    <Button text="Nuevo" fx:id="btnAdd" onAction="#manageAdd" style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+                    <Button text="Editar" fx:id="btnSave" onAction="#manageUpdate" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+                    <Button text="Eliminar" fx:id="btnDelete" onAction="#manageDelete" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                </HBox>
+
+            </VBox>
+        </AnchorPane>
+    </SplitPane>
+</VBox>
