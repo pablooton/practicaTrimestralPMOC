@@ -7,6 +7,7 @@ import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Usuario;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,12 +39,21 @@ public class MarketController implements Initializable {
 
     private final JugadorDao jugadorDAO = new JugadorDaoImpl();
     private final EquipoFantasyDao equipoFantasyDAO = new EquipoFantasyDaoImpl();
+    public TextField buscarField;
     private Jugador jugadorSeleccionado;
     private EquipoFantasy equipoUsuario;
     private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
 
+    private  FilteredList<Jugador> jugadoresFilter;
+    private  ObservableList<Jugador> jugadoresMercado;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        jugadoresMercado = FXCollections.observableArrayList();
+        jugadoresFilter = new FilteredList<>(jugadoresMercado,p->true);
+
+        marketTable.setItems(jugadoresFilter);
+
         configurarColumnas();
         cargarPresupuestoUsuario();
         cargarDatosMercado();
@@ -59,6 +69,26 @@ public class MarketController implements Initializable {
             } else {
                 limpiarDetallesJugador();
             }
+        });
+        buscarField.textProperty().addListener((observable, oldValue, newValue) -> {
+            jugadoresFilter.setPredicate(jugador ->{
+                if (newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+
+                String lowercaseFilter = newValue.toLowerCase();
+
+
+                if (jugador.getNombre().toLowerCase().contains(lowercaseFilter)){
+                    return true;
+                }
+
+                if (jugador.getPosicion().toLowerCase().contains(lowercaseFilter)){
+                    return true;
+                }
+
+                return false;
+            });
         });
     }
 
@@ -93,9 +123,9 @@ public class MarketController implements Initializable {
 
     private void cargarDatosMercado() {
         try {
+            jugadoresMercado.clear();
             List<Jugador> jugadores = jugadorDAO.sacarJugadoresMercado();
-            ObservableList<Jugador> jugadoresMercado = FXCollections.observableArrayList(jugadores);
-            marketTable.setItems(jugadoresMercado);
+            jugadoresMercado.addAll(jugadores);
         } catch (RuntimeException e) {
             showAlert("Error de Carga", "No se pudieron cargar los jugadores del mercado.", Alert.AlertType.ERROR);
         }
@@ -152,7 +182,7 @@ public class MarketController implements Initializable {
             equipoUsuario.setPresupuesto(equipoUsuario.getPresupuesto() - precioFichaje);
             actualizarLabelPresupuesto(equipoUsuario.getPresupuesto());
 
-            marketTable.getItems().remove(jugadorSeleccionado);
+            jugadoresMercado.remove(jugadorSeleccionado);
             marketTable.getSelectionModel().clearSelection();
             limpiarDetallesJugador();
 

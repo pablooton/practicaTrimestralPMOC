@@ -75,7 +75,7 @@ public class JugadorDaoImpl implements JugadorDao{
     public List<Jugador> buscarJugadores(String nombre) {
         List<Jugador> jugadoresEncontrados = new ArrayList<>();
 
-        String sql = "SELECT idjugadores, nombre, valorMercado, mediaPuntos, posicion, equipoLiga, isLibre FROM jugadores WHERE LOWER(nombre) LIKE ?";
+        String sql = "SELECT idjugadores, nombre, valorMercado, mediaPuntos, posicion, equipoLiga FROM jugadores WHERE LOWER(nombre) LIKE ? and isLibre = True";
 
         try(Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
