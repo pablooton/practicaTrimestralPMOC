@@ -1,12 +1,10 @@
 package edu.pmoc.practicatrim.practicatrimestralpmoc.controller;
 
 import edu.pmoc.practicatrim.practicatrimestralpmoc.SessionManager;
-import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.EquipoFantasyDao;
-import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.EquipoFantasyDaoImpl;
-import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.UsuarioDao;
-import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.UsuarioDaoImpl;
+import edu.pmoc.practicatrim.practicatrimestralpmoc.dao.*;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
+import edu.pmoc.practicatrim.practicatrimestralpmoc.model.JugadoresEquipos;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Usuario;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class UsersController {
@@ -45,6 +44,8 @@ public class UsersController {
 
     private final UsuarioDao usuarioDao = new UsuarioDaoImpl();
     private final EquipoFantasyDao equipoFantasyDao = new EquipoFantasyDaoImpl();
+    private JugadoresEquipos jugadoresEquipos;
+    private final JugadorEquipoDao jugadorEquipoDao = new JugadorEquipoDaoImpl();
     private EquipoFantasy equipoFantasy;
     private Jugador jugador;
     private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
@@ -155,9 +156,38 @@ public class UsersController {
     @FXML
     public void handleCalcularTiempo(ActionEvent actionEvent) {
         Jugador jugador = tablaJugadores.getSelectionModel().getSelectedItem();
-        if (jugador != null) {
-
+        if (jugador == null || equipoFantasy == null) {
+            showAlert("Error de Selección", "Debe seleccionar un jugador y tener un equipo activo.", Alert.AlertType.WARNING);
+            return;
         }
+
+        int idJugador = jugador.getIdJugador();
+        int idEquipo = equipoFantasy.getIdEquipo();
+
+        JugadoresEquipos registroAsociacion = jugadorEquipoDao.getJugadoresEquipos(idJugador, idEquipo);
+        if (registroAsociacion == null) {
+            showAlert("Error", "Este jugador no está en tu plantilla o el registro de fichaje no existe.", Alert.AlertType.ERROR);
+            return;
+        }
+        Date fechaFichaje = registroAsociacion.getFechaFichaje();
+        Date fechaSalida = registroAsociacion.getFechaSalida();
+
+        int diasEnEquipo = jugadorEquipoDao.calcularTiempo(
+                idJugador,
+                idEquipo,
+                fechaFichaje,
+                fechaSalida
+        );
+
+        String mensajeTiempo = "Tiempo en el Club: " + diasEnEquipo + " días";
+        lblTiempoEnClub.setText(mensajeTiempo);
+
+        showAlert("Cálculo Exitoso",
+                "El jugador " + jugador.getNombre() +
+                        " ha estado " + diasEnEquipo + " días en tu equipo.",
+                Alert.AlertType.INFORMATION);
+
+
     }
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);

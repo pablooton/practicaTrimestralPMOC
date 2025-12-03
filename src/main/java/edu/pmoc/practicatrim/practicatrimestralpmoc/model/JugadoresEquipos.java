@@ -16,6 +16,7 @@ public class JugadoresEquipos {
         this.idEquipo = idEquipo;
         this.idJugador = idJugador;
     }
+    public JugadoresEquipos(){}
 
     public Date getFechaFichaje() {
         return fechaFichaje;
