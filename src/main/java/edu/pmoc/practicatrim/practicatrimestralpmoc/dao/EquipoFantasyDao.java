@@ -8,4 +8,7 @@ public interface EquipoFantasyDao {
     public boolean ficharJugador(int idEquipoFantasy, int idJugador, long precioJugador);
     public boolean venderJugador(int idJugador, int idEquipoFantasy, long precioVenta);
     public EquipoFantasy getEquipoByUserId(int idUsuario);
+    public void updateEquipo(EquipoFantasy equipo);
+    public void addEquipo(EquipoFantasy equipo);
+    public void eliminarEquipo(int idEquipo);
 }

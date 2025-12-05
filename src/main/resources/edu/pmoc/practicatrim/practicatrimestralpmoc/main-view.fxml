@@ -23,7 +23,6 @@
             <Menu fx:id="menuGestionDatos" mnemonicParsing="false" text="Gestión datos">
                 <items>
                     <MenuItem  mnemonicParsing="false" onAction="#handleJugadores" text="Gestión Jugadores" />
-                    <MenuItem  mnemonicParsing="false" onAction="#handleUsuarios" text="Gestión Usuarios" />
                     <MenuItem  mnemonicParsing="false" onAction="#handleEquipos" text="Gestión Equipos"/>
                 </items>
             </Menu>

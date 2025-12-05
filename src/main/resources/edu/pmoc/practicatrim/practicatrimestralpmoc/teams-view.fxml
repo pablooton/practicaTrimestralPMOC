@@ -1,14 +1,81 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.pmoc.practicatrim.practicatrimestralpmoc.TeamsView"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<VBox alignment="TOP_CENTER" spacing="15.0" style="-fx-background-color: #f4f4f4; -fx-padding: 20;"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.pmoc.practicatrim.practicatrimestralpmoc.controller.EquiposController">
+    <Label text="Gestión de Equipos Fantasy (Base de Datos)" alignment="CENTER" maxWidth="Infinity">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+        <padding><Insets bottom="10.0"/></padding>
+    </Label>
+
+    <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS" orientation="HORIZONTAL" style="-fx-border-color: #cccccc;">
+
+        <AnchorPane>
+            <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="10.0" style="-fx-padding: 10;">
+
+                <Label text="Lista de Equipos en la BD" style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #007bff;"/>
+
+                <TableView fx:id="tablaEquipos" VBox.vgrow="ALWAYS" prefHeight="200.0">
+                    <columns>
+                        <TableColumn fx:id="colIDEquipo" text="ID Equipo" prefWidth="80.0"/>
+                        <TableColumn fx:id="colNombre" text="Nombre Equipo" prefWidth="200.0"/>
+                        <TableColumn fx:id="colIDUsuario" text="ID Propietario" prefWidth="120.0"/>
+                        <TableColumn fx:id="colPresupuesto" text="Presupuesto" prefWidth="150.0"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </AnchorPane>
+
+        <AnchorPane style="-fx-background-color: #ffffff;">
+            <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  spacing="15.0" alignment="TOP_CENTER" style="-fx-padding: 20;">
+
+                <Label text="Detalles del Equipo" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #333333;"/>
+                <Separator />
+
+                <GridPane hgap="10.0" vgap="10.0">
+
+                    <Label text="ID Equipo:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="txtIdEquipo" editable="false" promptText="Generado automáticamente" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="txtNombre" promptText="Nombre del equipo (Ej: Los Galácticos)" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="ID Propietario (Usuario):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="txtIdUsuario" promptText="ID del usuario dueño del equipo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="Presupuesto (€):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="txtPresupuesto" promptText="Dinero disponible" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                </GridPane>
+
+                <Separator />
+
+                <HBox spacing="10.0" alignment="CENTER">
+                    <Button text="Nuevo" fx:id="btnAdd" onAction="#handleNewTeam" style="-fx-background-color: #3498db; -fx-text-fill: white;" />
+                    <Button text="Guardar" fx:id="btnSave" onAction="#handleSaveTeam" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+                    <Button text="Eliminar" fx:id="btnDelete" onAction="#handleDeleteTeam" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                </HBox>
+
+            </VBox>
+        </AnchorPane>
+    </SplitPane>
+</VBox>

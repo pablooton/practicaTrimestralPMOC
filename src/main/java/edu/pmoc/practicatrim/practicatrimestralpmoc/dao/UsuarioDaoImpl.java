@@ -1,16 +1,12 @@
 package edu.pmoc.practicatrim.practicatrimestralpmoc.dao;
 
 import edu.pmoc.practicatrim.practicatrimestralpmoc.db.DatabaseConnection;
-import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Jugador;
 import edu.pmoc.practicatrim.practicatrimestralpmoc.model.Usuario;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,6 +170,5 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
         return false;
     }
-
-
 }
+
