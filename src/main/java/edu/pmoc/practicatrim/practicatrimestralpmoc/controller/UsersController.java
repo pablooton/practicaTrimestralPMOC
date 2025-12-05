@@ -67,7 +67,7 @@ public class UsersController {
 
             if (equipoFantasy != null) {
 
-                lblNombreEquipo.setText(equipoFantasy.getNombreEquipo());
+                lblNombreEquipo.setText(equipoFantasy.getNombre());
                 lblPropietario.setText("Entrenador: " + usuarioActual.getNickname());
                 lblPresupuesto.setText("Presupuesto: " + equipoFantasy.getPresupuesto() + " €");
 

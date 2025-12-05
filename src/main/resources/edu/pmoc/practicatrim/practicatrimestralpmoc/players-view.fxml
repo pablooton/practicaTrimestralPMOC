@@ -76,6 +76,7 @@
                     <Button text="Nuevo" fx:id="btnAdd" onAction="#manageAdd" style="-fx-background-color: #3498db; -fx-text-fill: white;" />
                     <Button text="Editar" fx:id="btnSave" onAction="#manageUpdate" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
                     <Button text="Eliminar" fx:id="btnDelete" onAction="#manageDelete" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                    <Button text="Limpiar" fx:id="btnClear" onAction="#handleClearFields" style="-fx-background-color: #95a5a6; -fx-text-fill: white;"/>
                 </HBox>
 
             </VBox>

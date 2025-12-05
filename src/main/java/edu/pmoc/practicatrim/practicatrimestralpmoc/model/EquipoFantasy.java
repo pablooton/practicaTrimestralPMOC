@@ -31,7 +31,7 @@ public class EquipoFantasy {
         this.idEquipo = idEquipo;
     }
 
-    public String getNombreEquipo() {
+    public String getNombre() {
         return nombre;
     }
 

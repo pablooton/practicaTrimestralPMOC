@@ -16,4 +16,6 @@ public interface UsuarioDao {
     boolean updateNickname(int idUsuario, String newNickname);
     boolean updatePassword(int idUsuario, String password);
     boolean existeNickname(String nickname);
+    public boolean existeIdUsuario(int idUsuario);
 }
+

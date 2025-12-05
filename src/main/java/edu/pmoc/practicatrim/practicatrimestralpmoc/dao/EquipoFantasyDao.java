@@ -11,4 +11,5 @@ public interface EquipoFantasyDao {
     public void updateEquipo(EquipoFantasy equipo);
     public void addEquipo(EquipoFantasy equipo);
     public void eliminarEquipo(int idEquipo);
+    public List<EquipoFantasy> getAllEquipos();
 }

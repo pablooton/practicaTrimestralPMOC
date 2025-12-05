@@ -211,4 +211,8 @@ public class JugadoresController implements Initializable {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
+
+    public void handleClearFields(ActionEvent actionEvent) {
+        limpiarCampos();
+    }
 }

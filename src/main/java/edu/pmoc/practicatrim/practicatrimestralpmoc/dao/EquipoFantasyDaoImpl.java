@@ -5,6 +5,8 @@ import edu.pmoc.practicatrim.practicatrimestralpmoc.model.EquipoFantasy;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
 
@@ -116,6 +118,30 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
         }
         return exito;
     }
+    @Override
+    public List<EquipoFantasy> getAllEquipos() {
+        List<EquipoFantasy> equipos = new ArrayList<>();
+        String sql = "SELECT idEquipo, nombre, idUsuario, presupuesto FROM equiposfantasy";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                EquipoFantasy equipo = new EquipoFantasy(
+                        rs.getInt("idEquipo"),
+                        rs.getString("nombre"),
+                        rs.getInt("idUsuario"),
+                        rs.getLong("presupuesto")
+                );
+                equipos.add(equipo);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al cargar todos los equipos de la base de datos.", e);
+        }
+        return equipos;
+    }
 
     @Override
     public boolean venderJugador(int idJugador, int idEquipoFantasy, long precioVenta) {
@@ -183,7 +209,7 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, equipo.getNombreEquipo());
+            ps.setString(1, equipo.getNombre());
             ps.setInt(2, equipo.getIdUsuario());
             ps.setLong(3, equipo.getPresupuesto());
 
@@ -206,7 +232,7 @@ public class EquipoFantasyDaoImpl implements EquipoFantasyDao {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, equipo.getNombreEquipo());
+            ps.setString(1, equipo.getNombre());
             ps.setInt(2, equipo.getIdUsuario());
             ps.setLong(3, equipo.getPresupuesto());
             ps.setInt(4, equipo.getIdEquipo());

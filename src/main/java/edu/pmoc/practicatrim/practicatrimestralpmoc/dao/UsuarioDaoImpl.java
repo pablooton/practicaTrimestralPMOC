@@ -170,5 +170,28 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
         return false;
     }
+
+    @Override
+    public boolean existeIdUsuario(int idUsuario) {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE idusuario = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+
+            throw new RuntimeException("Error en la base de datos al verificar existencia de usuario.", e);
+        }
+        return false;
+    }
 }
+
 
