@@ -8,7 +8,8 @@ public enum AppView {
     PLAYERS("/edu/pmoc/practicatrim/practicatrimestralpmoc/players-view.fxml"),
     PROFILE("/edu/pmoc/practicatrim/practicatrimestralpmoc/profile-view.fxml"),
     MARKET("/edu/pmoc/practicatrim/practicatrimestralpmoc/market-view.fxml"),
-    TEAMS("/edu/pmoc/practicatrim/practicatrimestralpmoc/teams-view.fxml");
+    TEAMS("/edu/pmoc/practicatrim/practicatrimestralpmoc/teams-view.fxml"),
+    USERSBD("/edu/pmoc/practicatrim/practicatrimestralpmoc/usersbd-view.fxml");
 
 
     private final String fxmlFile;

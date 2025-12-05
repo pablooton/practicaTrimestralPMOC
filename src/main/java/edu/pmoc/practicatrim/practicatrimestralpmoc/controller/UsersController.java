@@ -63,7 +63,7 @@ public class UsersController {
         Usuario usuarioActual = SessionManager.getInstance().getCurrentUser();
 
         if (usuarioActual != null) {
-            equipoFantasy = equipoFantasyDao.getEquipoByUserId(usuarioActual.getIdUsuario());
+            equipoFantasy = equipoFantasyDao.getEquipoByUserId(usuarioActual.getIdusuario());
 
             if (equipoFantasy != null) {
 
@@ -72,7 +72,7 @@ public class UsersController {
                 lblPresupuesto.setText("Presupuesto: " + equipoFantasy.getPresupuesto() + " €");
 
 
-                cargarJugadores(usuarioActual.getIdUsuario());
+                cargarJugadores(usuarioActual.getIdusuario());
             } else {
                 lblNombreEquipo.setText("Sin Equipo");
                 lblPropietario.setText("Necesitas crear un equipo.");

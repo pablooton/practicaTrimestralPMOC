@@ -24,6 +24,7 @@
                 <items>
                     <MenuItem  mnemonicParsing="false" onAction="#handleJugadores" text="Gestión Jugadores" />
                     <MenuItem  mnemonicParsing="false" onAction="#handleEquipos" text="Gestión Equipos"/>
+                    <MenuItem  mnemonicParsing="false" onAction="#handleUsers" text="Gestión Usuarios"/>
                 </items>
             </Menu>
         </MenuBar>

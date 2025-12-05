@@ -110,7 +110,7 @@ public class MarketController implements Initializable {
     private void cargarPresupuestoUsuario() {
         Usuario usuarioActual = SessionManager.getInstance().getCurrentUser();
         if (usuarioActual != null) {
-            equipoUsuario = equipoFantasyDAO.getEquipoByUserId(usuarioActual.getIdUsuario());
+            equipoUsuario = equipoFantasyDAO.getEquipoByUserId(usuarioActual.getIdusuario());
             if (equipoUsuario != null) {
                 actualizarLabelPresupuesto(equipoUsuario.getPresupuesto());
             } else {

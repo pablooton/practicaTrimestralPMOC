@@ -76,7 +76,7 @@ public class ProfileController implements Initializable {
             return;
         }
 
-        boolean exito = usuarioDAO.updateNickname(usuarioActual.getIdUsuario(), nuevoNickname);
+        boolean exito = usuarioDAO.updateNickname(usuarioActual.getIdusuario(), nuevoNickname);
 
         if (exito) {
 
@@ -113,7 +113,7 @@ public class ProfileController implements Initializable {
             return;
         }
 
-        boolean exito = usuarioDAO.updatePassword(usuarioActual.getIdUsuario(), nuevaContra);
+        boolean exito = usuarioDAO.updatePassword(usuarioActual.getIdusuario(), nuevaContra);
         if (exito){
             usuarioActual.setPassword(nuevaContra);
 

@@ -17,5 +17,7 @@ public interface UsuarioDao {
     boolean updatePassword(int idUsuario, String password);
     boolean existeNickname(String nickname);
     public boolean existeIdUsuario(int idUsuario);
+    public void deleteUser(int idUser);
+    public void updateUserAdminStatus(int idUsuario, boolean isAdmin);
 }
 

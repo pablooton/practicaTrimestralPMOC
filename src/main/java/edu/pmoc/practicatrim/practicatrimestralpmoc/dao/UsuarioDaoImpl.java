@@ -133,6 +133,80 @@ public class UsuarioDaoImpl implements UsuarioDao {
             return false;
         }
     }
+    @Override
+    public void deleteUser(int idUser) {
+
+        String sqlLiberarJugadores = "UPDATE jugadores j " +
+                "INNER JOIN jugadores_equipos je ON j.idjugadores = je.id_jugador " +
+                "INNER JOIN equiposfantasy ef ON je.id_equipofantasy = ef.idEquipo " +
+                "SET j.isLibre = TRUE " +
+                "WHERE ef.idUsuario = ?";
+
+        String sqlDeleteFichajes = "DELETE je FROM jugadores_equipos je " +
+                "INNER JOIN equiposfantasy ef ON je.id_equipofantasy = ef.idEquipo " +
+                "WHERE ef.idUsuario = ?";
+
+
+        String sqlDeleteEquipoFantasy = "DELETE FROM equiposfantasy WHERE idUsuario = ?";
+
+        String sqlDeleteUsuario = "DELETE FROM usuarios WHERE idusuario = ?";
+
+        Connection connection = null;
+
+        try {
+            connection = DatabaseConnection.getConnection();
+            connection.setAutoCommit(false);
+
+            // 1. LIBERAR JUGADORES
+            try (PreparedStatement psLiberar = connection.prepareStatement(sqlLiberarJugadores)) {
+                psLiberar.setInt(1, idUser);
+                psLiberar.executeUpdate();
+            }
+
+            // 2. ELIMINAR FICHAJES
+            try (PreparedStatement psFichajes = connection.prepareStatement(sqlDeleteFichajes)) {
+                psFichajes.setInt(1, idUser);
+                psFichajes.executeUpdate();
+            }
+
+            // 3. ELIMINAR EQUIPO FANTASY
+            try (PreparedStatement psEquipo = connection.prepareStatement(sqlDeleteEquipoFantasy)) {
+                psEquipo.setInt(1, idUser);
+                psEquipo.executeUpdate();
+            }
+
+            // 4. ELIMINAR USUARIO
+            try (PreparedStatement psUsuario = connection.prepareStatement(sqlDeleteUsuario)) {
+                psUsuario.setInt(1, idUser);
+                psUsuario.executeUpdate();
+            }
+
+            connection.commit();
+
+        } catch (SQLException e) {
+            System.err.println("Error SQL durante la eliminación del usuario. Intentando Rollback...");
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                    System.err.println("Rollback exitoso.");
+                }
+            } catch (SQLException rollbackEx) {
+                System.err.println("Error crítico durante el rollback: " + rollbackEx.getMessage());
+            }
+
+            throw new RuntimeException("Error al eliminar el usuario con ID: " + idUser + ". Revisar dependencias. Detalle: " + e.getMessage(), e);
+
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                }
+            } catch (SQLException closeEx) {
+                System.err.println("Error al cerrar la conexión: " + closeEx.getMessage());
+            }
+        }
+    }
 
     @Override
     public boolean updatePassword(int idUsuario, String newPassword) {
@@ -169,6 +243,22 @@ public class UsuarioDaoImpl implements UsuarioDao {
             return true;
         }
         return false;
+    }
+    @Override
+    public void updateUserAdminStatus(int idUsuario, boolean isAdmin) {
+        String sql = "UPDATE usuarios SET isAdmin=? WHERE idusuario=?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBoolean(1, isAdmin);
+            stmt.setInt(2, idUsuario);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar el estado de administrador del usuario con ID: " + idUsuario, e);
+        }
     }
 
     @Override

@@ -89,4 +89,8 @@ public class MainController implements Initializable {
     public void handleEquipos(ActionEvent actionEvent) {
         ViewSwitcher.switchView(AppView.TEAMS);
     }
+
+    public void handleUsers(ActionEvent actionEvent) {
+        ViewSwitcher.switchView(AppView.USERSBD);
+    }
 }
