@@ -12,7 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+        import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -22,13 +22,13 @@ import java.util.ResourceBundle;
 
 public class MarketController implements Initializable {
 
+
     @FXML public TableView<Jugador> marketTable;
     @FXML public TableColumn<Jugador, String> colNombre;
     @FXML public TableColumn<Jugador, String> colPosicion;
     @FXML public TableColumn<Jugador, Integer> colMediaPuntos;
     @FXML public TableColumn<Jugador, Long> colValorMercado;
     @FXML public Label lblPresupuesto;
-
     @FXML public VBox detailPane;
     @FXML public TextField txtDetalleNombre;
     @FXML public TextField txtDetallePosicion;
@@ -37,15 +37,30 @@ public class MarketController implements Initializable {
     @FXML public TextField txtDetalleValorMercado;
     @FXML public Button btnComprar;
 
+
+    @FXML public TextField buscarField;
+    @FXML public Slider valorSlider;
+    @FXML public Label lblSliderValue;
+
+
+    @FXML public CheckBox chkTodos;
+    @FXML public CheckBox chkPOR;
+    @FXML public CheckBox chkDEF;
+    @FXML public CheckBox chkMED;
+    @FXML public CheckBox chkDEL;
+
     private final JugadorDao jugadorDAO = new JugadorDaoImpl();
     private final EquipoFantasyDao equipoFantasyDAO = new EquipoFantasyDaoImpl();
-    public TextField buscarField;
     private Jugador jugadorSeleccionado;
     private EquipoFantasy equipoUsuario;
     private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es", "ES"));
 
-    private  FilteredList<Jugador> jugadoresFilter;
-    private  ObservableList<Jugador> jugadoresMercado;
+    private FilteredList<Jugador> jugadoresFilter;
+    private ObservableList<Jugador> jugadoresMercado;
+
+
+    private static final long MAX_VALOR_MILLONES = 35;
+    private static final long VALOR_UNITARIO = 1_000_000L;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,6 +72,8 @@ public class MarketController implements Initializable {
         configurarColumnas();
         cargarPresupuestoUsuario();
         cargarDatosMercado();
+        configurarSlider();
+        configurarFiltrosPosicion();
 
         detailPane.setDisable(true);
         btnComprar.setDisable(true);
@@ -70,26 +87,39 @@ public class MarketController implements Initializable {
                 limpiarDetallesJugador();
             }
         });
-        buscarField.textProperty().addListener((observable, oldValue, newValue) -> {
-            jugadoresFilter.setPredicate(jugador ->{
-                if (newValue == null || newValue.isEmpty()){
-                    return true;
-                }
 
-                String lowercaseFilter = newValue.toLowerCase();
+        buscarField.textProperty().addListener((observable, oldValue, newValue) -> aplicarFiltros());
+        valorSlider.valueProperty().addListener((observable, oldValue, newValue) -> aplicarFiltros());
 
+        valorSlider.setValue(MAX_VALOR_MILLONES);
+        lblSliderValue.setText("Precio Máximo: " + currencyFormatter.format(MAX_VALOR_MILLONES * VALOR_UNITARIO));
+    }
 
-                if (jugador.getNombre().toLowerCase().contains(lowercaseFilter)){
-                    return true;
-                }
+    private void configurarFiltrosPosicion() {
 
-                if (jugador.getPosicion().toLowerCase().contains(lowercaseFilter)){
-                    return true;
-                }
-
-                return false;
-            });
+        chkTodos.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                chkPOR.setSelected(false);
+                chkDEF.setSelected(false);
+                chkMED.setSelected(false);
+                chkDEL.setSelected(false);
+            }
+            aplicarFiltros();
         });
+
+        chkPOR.selectedProperty().addListener(obs -> manejarDeseleccionTotal());
+        chkDEF.selectedProperty().addListener(obs -> manejarDeseleccionTotal());
+        chkMED.selectedProperty().addListener(obs -> manejarDeseleccionTotal());
+        chkDEL.selectedProperty().addListener(obs -> manejarDeseleccionTotal());
+    }
+
+    private void manejarDeseleccionTotal() {
+        if (!chkPOR.isSelected() && !chkDEF.isSelected() && !chkMED.isSelected() && !chkDEL.isSelected()) {
+            chkTodos.setSelected(true);
+        } else if (chkTodos.isSelected()) {
+            chkTodos.setSelected(false);
+        }
+        aplicarFiltros();
     }
 
     private void configurarColumnas() {
@@ -104,6 +134,17 @@ public class MarketController implements Initializable {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null : currencyFormatter.format(item));
             }
+        });
+    }
+
+    private void configurarSlider() {
+        valorSlider.setMin(0);
+        valorSlider.setMax(MAX_VALOR_MILLONES);
+        valorSlider.setBlockIncrement(5);
+
+        valorSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            long valorActual = newVal.longValue() * VALOR_UNITARIO;
+            lblSliderValue.setText("Precio Máximo: " + currencyFormatter.format(valorActual));
         });
     }
 
@@ -126,6 +167,7 @@ public class MarketController implements Initializable {
             jugadoresMercado.clear();
             List<Jugador> jugadores = jugadorDAO.sacarJugadoresMercado();
             jugadoresMercado.addAll(jugadores);
+            aplicarFiltros();
         } catch (RuntimeException e) {
             showAlert("Error de Carga", "No se pudieron cargar los jugadores del mercado.", Alert.AlertType.ERROR);
         }
@@ -157,6 +199,54 @@ public class MarketController implements Initializable {
     }
 
     @FXML
+    private void aplicarFiltros() {
+        final String textoFiltro = buscarField.getText().toLowerCase();
+        final long maxValorPermitido = valorSlider.getValue() == 0 ? Long.MAX_VALUE : (long) (valorSlider.getValue() * VALOR_UNITARIO);
+        final boolean filtrarPorPosicion = !chkTodos.isSelected();
+        final boolean chkPOR_sel = chkPOR.isSelected();
+        final boolean chkDEF_sel = chkDEF.isSelected();
+        final boolean chkMED_sel = chkMED.isSelected();
+        final boolean chkDEL_sel = chkDEL.isSelected();
+
+
+        jugadoresFilter.setPredicate(jugador -> {
+            if (jugador.getValorMercado() > maxValorPermitido) {
+                return false;
+            }
+            if (filtrarPorPosicion) {
+                boolean coincidePosicion = false;
+                String pos = jugador.getPosicion();
+
+                if (chkPOR_sel && pos.equals("POR")) {
+                    coincidePosicion = true;
+                } else if (chkDEF_sel && pos.equals("DEF")) {
+                    coincidePosicion = true;
+                } else if (chkMED_sel && pos.equals("CEN")) {
+                    coincidePosicion = true;
+                } else if (chkDEL_sel && pos.equals("DEL")) {
+                    coincidePosicion = true;
+                }
+
+                if (!coincidePosicion) {
+                    return false;
+                }
+            }
+            if (textoFiltro.isEmpty()) {
+                return true;
+            }
+
+            String nombre = jugador.getNombre().toLowerCase();
+            String posicion = jugador.getPosicion().toLowerCase();
+
+            if (nombre.contains(textoFiltro) || posicion.contains(textoFiltro)) {
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    @FXML
     public void handleFicharJugador(ActionEvent actionEvent) {
         if (jugadorSeleccionado == null || equipoUsuario == null) {
             showAlert("Error", "Asegúrate de seleccionar un jugador y tener un equipo.", Alert.AlertType.WARNING);
@@ -181,8 +271,7 @@ public class MarketController implements Initializable {
 
             equipoUsuario.setPresupuesto(equipoUsuario.getPresupuesto() - precioFichaje);
             actualizarLabelPresupuesto(equipoUsuario.getPresupuesto());
-
-            jugadoresMercado.remove(jugadorSeleccionado);
+            cargarDatosMercado();
             marketTable.getSelectionModel().clearSelection();
             limpiarDetallesJugador();
 

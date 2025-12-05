@@ -17,6 +17,8 @@ import java.util.ResourceBundle;
 public class UsersBdController implements Initializable {
 
 
+    public Button btnDelete;
+    @FXML Button btnUpdateAdmin;
     @FXML private TableView<Usuario> tablaUsuarios;
     @FXML private TableColumn<Usuario, Integer> colID;
     @FXML private TableColumn<Usuario, String> colNombre;

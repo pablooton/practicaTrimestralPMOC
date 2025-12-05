@@ -11,30 +11,27 @@
     <top>
         <MenuBar>
             <Menu mnemonicParsing="false" text="Archivo">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#handleLogout" text="Cerrar Sesión" />
-                </items>
+
+                <MenuItem mnemonicParsing="false" onAction="#handleLogout" text="Cerrar Sesión" />
+
             </Menu>
             <Menu mnemonicParsing="false" text="Ver">
-                <items>
-                    <MenuItem mnemonicParsing="false" onAction="#handleShowUserProfile" text="Mi Perfil" />
-                </items>
+
+                <MenuItem mnemonicParsing="false" onAction="#handleShowUserProfile" text="Mi Perfil" />
+
             </Menu>
             <Menu fx:id="menuGestionDatos" mnemonicParsing="false" text="Gestión datos">
-                <items>
-                    <MenuItem  mnemonicParsing="false" onAction="#handleJugadores" text="Gestión Jugadores" />
-                    <MenuItem  mnemonicParsing="false" onAction="#handleEquipos" text="Gestión Equipos"/>
-                    <MenuItem  mnemonicParsing="false" onAction="#handleUsers" text="Gestión Usuarios"/>
-                </items>
+
+                <MenuItem  mnemonicParsing="false" onAction="#handleJugadores" text="Gestión Jugadores" />
+                <MenuItem  mnemonicParsing="false" onAction="#handleEquipos" text="Gestión Equipos"/>
+                <MenuItem  mnemonicParsing="false" onAction="#handleUsers" text="Gestión Usuarios"/>
             </Menu>
         </MenuBar>
     </top>
     <left>
         <VBox prefWidth="150.0" spacing="10" style="-fx-padding: 10;">
-            <children>
                 <Button maxWidth="1.7976931348623157E308" onAction="#handleShowUsers" text="Mi equipo" />
                 <Button maxWidth="1.7976931348623157E308" text="Mercado" onAction="#handleMercado"/>
-            </children>
         </VBox>
     </left>
     <center>

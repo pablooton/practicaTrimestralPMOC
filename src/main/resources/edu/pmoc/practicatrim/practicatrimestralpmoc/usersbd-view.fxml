@@ -24,7 +24,7 @@
         <padding><Insets bottom="10.0"/></padding>
     </Label>
 
-    <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS" orientation="HORIZONTAL" style="-fx-border-color: #cccccc;">
+    <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS"  style="-fx-border-color: #cccccc;">
 
         <AnchorPane>
             <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="10.0" style="-fx-padding: 10;">

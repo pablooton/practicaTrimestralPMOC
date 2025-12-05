@@ -42,7 +42,7 @@
         <Label fx:id="lblPresupuesto" text="100.000.000 €" style="-fx-font-weight: bold; -fx-text-fill: #007bff; -fx-font-size: 16px;"/>
     </HBox>
 
-    <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS" orientation="HORIZONTAL">
+    <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS" >
 
         <AnchorPane>
             <VBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" spacing="5.0">
@@ -51,7 +51,7 @@
                 <TableView fx:id="tablaJugadores" VBox.vgrow="ALWAYS" prefHeight="200.0">
                     <columns>
                         <TableColumn fx:id="colNombre" text="Jugador" prefWidth="150.0"/>
-                        <TableColumn fx:id="colPosicion" text="Posición" prefWidth="80.0"/>
+                        <TableColumn fx:id="colPosicion" text="Posición" />
                         <TableColumn fx:id="colEquipoReal" text="Equipo Liga" prefWidth="120.0"/>
                         <TableColumn fx:id="colPuntos" text="Media Puntos" prefWidth="90.0"/>
                         <TableColumn fx:id="colValor" text="Valor Venta (€)" prefWidth="110.0"/>

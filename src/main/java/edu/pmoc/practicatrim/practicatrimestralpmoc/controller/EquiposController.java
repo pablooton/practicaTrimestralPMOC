@@ -18,6 +18,10 @@ import java.util.ResourceBundle;
 
 public class EquiposController implements Initializable {
 
+    public Button btnAdd;
+    public Button btnSave;
+    public Button btnDelete;
+    public Button btnClear;
     @FXML private TableView<EquipoFantasy> tablaEquipos;
     @FXML private TableColumn<EquipoFantasy, Integer> colIDEquipo;
     @FXML private TableColumn<EquipoFantasy, String> colNombre;

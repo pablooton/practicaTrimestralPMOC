@@ -16,6 +16,10 @@ import java.util.ResourceBundle;
 
 public class JugadoresController implements Initializable {
 
+    public Button btnAdd;
+    public Button btnSave;
+    public Button btnDelete;
+    public Button btnClear;
     @FXML private TableView<Jugador> tablaJugadores;
     @FXML private TableColumn<Jugador, Integer> colID;
     @FXML private TableColumn<Jugador, String> colNombre;
