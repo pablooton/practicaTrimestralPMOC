@@ -75,7 +75,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
                             rs.getString("apellido"),
                             rs.getString("nickname"),
                             rs.getString("password"),
-                            false
+                            rs.getBoolean("isAdmin")
                     );
                 }
             }

@@ -19,14 +19,6 @@ public class Usuario {
         this.isAdmin = isAdmin;
     }
 
-    public Usuario(String nombre, String apellido,  String nickname, String password) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.nickname = nickname;
-        this.password = password;
-    }
-
-
 
     public String getApellido() {
         return apellido;

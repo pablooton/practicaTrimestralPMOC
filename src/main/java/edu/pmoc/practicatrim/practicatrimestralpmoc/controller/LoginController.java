@@ -39,16 +39,17 @@ public class LoginController implements Initializable {
     @FXML public Button _loginButton;
 
     private final UsuarioDao usuarioDao = new UsuarioDaoImpl();
-
     @FXML
     public void manageLogin(ActionEvent actionEvent) {
         String username = nombreT.getText();
         String password = contraseñaT.getText();
 
+
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Campos vacíos", "Por favor, introduce usuario y contraseña.");
             return;
         }
+
 
         if (usuarioDao.validarCredenciales(username, password)) {
             Usuario usuario = usuarioDao.getUserByNickname(username);
